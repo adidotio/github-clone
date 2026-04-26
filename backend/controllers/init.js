@@ -4,6 +4,7 @@ const path = require("path");
 async function initRepo(){
     const initPath = path.resolve(process.cwd(), ".Git");
     const commitPath = path.join(initPath, "commits");
+    const objectsPath = path.join(initPath, "objects");
 
     try{
         await fs.mkdir(initPath, {recursive: true});
@@ -12,6 +13,7 @@ async function initRepo(){
             path.join(initPath, "config.json"),
             JSON.stringify({bucket: process.env.S3_BUCKET})
         )
+        await fs.mkdir(objectsPath, {recursive: true});
 
         console.log("Repositry initialised !!");
     } catch(err){
