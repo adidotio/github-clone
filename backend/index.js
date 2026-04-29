@@ -14,5 +14,5 @@ yargs(hideBin(process.argv))
 .command("commit <msg>", "To commit changes in the repositry", (yargs) => {yargs.positional("msg", {describe: "Commit message", type: "string"})}, (argv) => {commitFile(argv.msg)})
 .command("push", "Push changes in the repositry", {}, pushRepo)
 .command("pull", "Pull changes from the repositry", {}, pullRepo)
-.command("revert <commitId>", "Revert through commit Id", (yargs) => {yargs.positional("file", {describe: "Commit ID to revert changes", type: "string"})}, revertChanges)
+.command("revert <commitId>", "Revert through commit Id", (yargs) => {yargs.positional("file", {describe: "Commit ID to revert changes", type: "string"})}, (argv) => {revertChanges(argv.commitId)})
 .demandCommand(1, "Need at least one command").help().argv;

@@ -35,11 +35,18 @@ async function addFile(filePath) {
         await fsp.mkdir(stagingPath, { recursive: true });
         const stageFile = path.join(stagingPath, "stage.json");
 
+        let stagedData = {};
+
+        if (fs.existsSync(stageFile)) {
+            const existingData = await fsp.readFile(stageFile, "utf-8");
+            stagedData = JSON.parse(existingData);
+        }
+
+        stagedData[filePath] = hash;
+
         await fsp.writeFile(
             stageFile,
-            JSON.stringify({
-                [filePath]: hash
-            }, null, 2)
+            JSON.stringify(stagedData, null, 2)
         );
 
         console.log(`File ${filePath} added to staging area`);
