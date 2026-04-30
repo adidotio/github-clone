@@ -10,6 +10,7 @@ async function commitFile(msg){
     const stagedPath = path.join(repoPath, "stage");
     const commitPath = path.join(repoPath, "commits");
     const stageConfigFile = path.join(stagedPath, "stage.json");
+    const headPath = path.join(repoPath, "HEAD");
 
     try{
         if(!fs.existsSync(stageConfigFile)){
@@ -25,10 +26,14 @@ async function commitFile(msg){
             return;
         }
 
+        const currentHead = (await fsp.readFile(headPath, "utf-8")).trim();
+        const parentId = currentHead || null;     // empty if its the first commit
+
         const commitId = uuidv4();
 
         const commitData = {
             id: commitId,
+            parent: parentId,
             message: msg,
             timestamp: new Date().toISOString(),
             files: files
@@ -38,6 +43,9 @@ async function commitFile(msg){
             path.join(commitPath, `${commitId}.json`),
             JSON.stringify(commitData, null, 2)
         );
+
+        // Update head with new commit
+        await fsp.writeFile(headPath, commitId, "utf-8");
 
         // Clear stage object
         await fsp.writeFile(
