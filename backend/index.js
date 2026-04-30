@@ -8,6 +8,7 @@ const {pushRepo} = require("./controllers/push");
 const {pullRepo} = require("./controllers/pull");
 const {revertChanges} = require("./controllers/revert");
 const {gitStatus} = require("./controllers/status");
+const {gitLog} = require("./controllers/log");
 
 yargs(hideBin(process.argv))
 .command("init", "Initialise a new repositry", {}, initRepo)
@@ -17,4 +18,5 @@ yargs(hideBin(process.argv))
 .command("pull", "Pull changes from the repositry", {}, pullRepo)
 .command("revert <commitId>", "Revert through commit Id", (yargs) => {yargs.positional("file", {describe: "Commit ID to revert changes", type: "string"})}, (argv) => {revertChanges(argv.commitId)})
 .command("status", "Check all the untracked changes", {}, gitStatus)
+.command("log", "Track branch commit history", {}, gitLog)
 .demandCommand(1, "Need at least one command").help().argv;
