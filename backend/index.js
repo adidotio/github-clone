@@ -1,6 +1,8 @@
+require('dotenv').config()
 const yargs = require("yargs");
 const {hideBin} = require("yargs/helpers");
 
+// All the Git CLI commands
 const {initRepo} = require("./controllers/init");
 const {addFile} = require("./controllers/add");
 const {commitFile} = require("./controllers/commit");
