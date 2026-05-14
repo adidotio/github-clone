@@ -3,14 +3,14 @@ const yargs = require("yargs");
 const {hideBin} = require("yargs/helpers");
 
 // All the Git CLI commands
-const {initRepo} = require("./controllers/init");
-const {addFile} = require("./controllers/add");
-const {commitFile} = require("./controllers/commit");
-const {pushRepo} = require("./controllers/push");
-const {pullRepo} = require("./controllers/pull");
-const {revertChanges} = require("./controllers/revert");
-const {gitStatus} = require("./controllers/status");
-const {gitLog} = require("./controllers/log");
+const {initRepo} = require("./controllers/cli_command/init");
+const {addFile} = require("./controllers/cli_command/add");
+const {commitFile} = require("./controllers/cli_command/commit");
+const {pushRepo} = require("./controllers/cli_command/push");
+const {pullRepo} = require("./controllers/cli_command/pull");
+const {revertChanges} = require("./controllers/cli_command/revert");
+const {gitStatus} = require("./controllers/cli_command/status");
+const {gitLog} = require("./controllers/cli_command/log");
 
 yargs(hideBin(process.argv))
 .command("init", "Initialise a new repositry", {}, initRepo)
