@@ -1,5 +1,5 @@
 // This is the code if you are using cookie and auth from supabase so not required if we have JWT and other cookie management system
-// const { createServerClient, parseCookieHeader, serializeCookieHeader } = require('@supabase/ssr')
+// const { createServerClient, parseCookieHeader, serializeCookieHeader } = require('@supabase/ssr')cd 
 
 // exports.createClient = (context) => {
 //   return createServerClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
@@ -21,9 +21,9 @@ require('dotenv').config();
 
 const { createClient } = require('@supabase/supabase-js');
 
-const supabase = createClient(
+const supabaseClient = createClient(
   process.env.SUPABASE_URL,
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
-module.exports = supabase;
+module.exports = supabaseClient;
