@@ -3,6 +3,8 @@ const fs = require("fs");
 const fsp = fs.promises;
 const path = require("path");
 
+
+// Helper to upload the files into supabase (For push command)
 const uploadBlob = async (hash, buffer) => {
     const repoPath = path.resolve(process.cwd(), ".Git");
     const objectPath = path.join(repoPath, "objects");
@@ -28,6 +30,7 @@ const uploadBlob = async (hash, buffer) => {
     console.log("Blob uploaded");
     return s3Key;
 
+    // take files from commit  
     // try{
     //     const currentHead = (await fsp.readFile(headPath, "utf-8")).trim();
     //     const parentId = currentHead || null; 
@@ -60,4 +63,37 @@ const uploadBlob = async (hash, buffer) => {
     
 }
 
-module.exports = uploadBlob;
+
+// Helper to download files from supabase (For pull and clone commands)
+const downloadBlob = async (s3Key) => {
+    const repoPath = path.resolve(process.cwd(), ".Git");
+    const objectPath = path.join(repoPath, "objects");
+
+    // Extract hash from s3Key
+    const hash = path.basename(s3Key, ".blob");
+
+    const localObjectPath = path.join(objectPath, hash);
+
+    if(fs.existsSync(localObjectPath)){
+        console.log("Blob already cached locally");
+        return await fsp.readFile(localObjectPath);
+    }
+
+    const { data, error } = await supabaseClient.storage.from('git-blobs').download(s3Key);     // this only returns blob object need to convert it in the buffer
+
+    if(error){
+        throw error;
+    } else{
+        console.log("File download successfully !!");
+    }
+
+    // blob -> array buffer -> buffer
+    const arrayBuffer = await data.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    await fsp.writeFile(localObjectPath, buffer);
+    console.log("File cached as well");
+    return buffer;
+}
+
+module.exports = {uploadBlob, downloadBlob};
